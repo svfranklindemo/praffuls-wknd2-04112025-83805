@@ -728,6 +728,20 @@ export function decorateDefaultBlock() {
         picture.setAttribute('data-img-id', imgId);
       }
     });
+
+    // Add indexed IDs to heading elements (h1-h6) within the block
+    const headings = block.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    headings.forEach((heading, headingIndex) => {
+      const tagName = heading.tagName.toLowerCase();
+      heading.id = `${shortBlockName}_${index}_${tagName}_${headingIndex}`;
+    });
+
+    // Add indexed IDs to paragraph elements within the block
+    const paragraphs = block.querySelectorAll('p');
+    paragraphs.forEach((p, pIndex) => {
+      p.id = `${shortBlockName}_${index}_p_${pIndex}`;
+    });
+    
   });
 }
 
