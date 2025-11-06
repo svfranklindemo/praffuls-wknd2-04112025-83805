@@ -120,12 +120,15 @@ export default function decorate(block) {
         if (picWrapper && picWrapper.children.length === 1) {
           // picture is only content in column
           picWrapper.classList.add('columns-img-col');
+          picWrapper.id = `columns_${blockIndex}_container_${contentCounter}`;
+          picWrapper.setAttribute('data-container-index', contentCounter);
+          contentCounter++;
         }
       }
 
       // Check for text content (paragraphs or headings)
       const textContent = col.querySelector('p, h1, h2, h3, h4, h5, h6');
-      if (textContent) {
+      if (textContent && !pic) {  // Only add if no picture (avoid double counting)
         const contentWrapper = textContent.closest('div');
         if (contentWrapper) {
           contentWrapper.id = `columns_${blockIndex}_container_${contentCounter}`;
