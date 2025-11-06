@@ -54,11 +54,12 @@ export default function decorate(block) {
       }
     });
 
-    // Add indexed IDs to heading elements (h1-h6) within the block
-    const headings = block.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    headings.forEach((heading, headingIndex) => {
-      const tagName = heading.tagName.toLowerCase();
-      heading.id = `cards_${index}_${tagName}_${headingIndex}`;
+    // Add indexed IDs to heading elements (h1-h6) within the block with separate counters
+    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
+      const headings = block.querySelectorAll(tag);
+      headings.forEach((heading, headingIndex) => {
+        heading.id = `cards_${index}_${tag}_${headingIndex}`;
+      });
     });
 
     // Add indexed IDs to paragraph elements within the block
