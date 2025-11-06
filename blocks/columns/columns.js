@@ -128,7 +128,8 @@ export default function decorate(block) {
       if (textContent) {
         const contentWrapper = textContent.closest('div');
         if (contentWrapper) {
-          contentWrapper.id = `columns_${blockIndex}_content_${contentCounter}`;
+          contentWrapper.id = `columns_${blockIndex}_container_${contentCounter}`;
+          contentWrapper.setAttribute('data-container-index', contentCounter);
           contentCounter++;
         }
       }
@@ -170,16 +171,30 @@ export default function decorate(block) {
     });
   });
 
-  // Add IDs to headings and paragraphs
+  // Add IDs to headings and paragraphs with container context
   ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
     const headings = block.querySelectorAll(tag);
-    headings.forEach((heading, headingIndex) => {
-      heading.id = `columns_${blockIndex}_${tag}_${headingIndex}`;
+    headings.forEach((heading) => {
+      const container = heading.closest('[data-container-index]');
+      const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
+      
+      // Count this tag within its container
+      const containerHeadings = container ? container.querySelectorAll(tag) : [heading];
+      const tagIndex = Array.from(containerHeadings).indexOf(heading);
+      
+      heading.id = `columns_${blockIndex}_container_${containerIndex}_${tag}_${tagIndex}`;
     });
   });
 
   const paragraphs = block.querySelectorAll('p');
-  paragraphs.forEach((p, pIndex) => {
-    p.id = `columns_${blockIndex}_p_${pIndex}`;
+  paragraphs.forEach((p) => {
+    const container = p.closest('[data-container-index]');
+    const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
+    
+    // Count paragraphs within its container
+    const containerParagraphs = container ? container.querySelectorAll('p') : [p];
+    const pIndex = Array.from(containerParagraphs).indexOf(p);
+    
+    p.id = `columns_${blockIndex}_container_${containerIndex}_p_${pIndex}`;
   });
 }
