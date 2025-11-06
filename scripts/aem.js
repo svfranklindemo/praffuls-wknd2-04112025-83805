@@ -677,31 +677,30 @@ function decorateBlock(block) {
     const section = block.closest('.section');
     if (section) section.classList.add(`${shortBlockName}-container`);
     // eslint-disable-next-line no-use-before-define
-
-    
     decorateButtons(block);
 
-        // Set block ID with shortBlockName and index
-  const blocks = document.querySelectorAll(`.${shortBlockName}`);
-  blocks.forEach((block, index) => {
+    // Set block ID with shortBlockName and index
+    const blocks = document.querySelectorAll(`.${shortBlockName}`);
+    blocks.forEach((block, index) => {
     block.id = `${shortBlockName}-${index}`;
-    
-    // Add indexed IDs to images within the block
-    const images = block.querySelectorAll('img');
-    images.forEach((img, imgIndex) => {
-      const imgId = `${shortBlockName}_${index}_image_${imgIndex}`;
-      img.id = imgId;
-      
-      // If image is inside a picture element, also add a data attribute to the picture
-      const picture = img.closest('picture');
-      if (picture) {
-        picture.setAttribute('data-img-id', imgId);
-      }
-    });
 
     // Skip content ID generation for blocks that handle it themselves (columns, cards, carousel)
     const blocksWithCustomIDs = ['columns', 'cards', 'carousel'];
     if (!blocksWithCustomIDs.includes(shortBlockName)) {
+
+      // Add indexed IDs to images within the block
+      const images = block.querySelectorAll('img');
+      images.forEach((img, imgIndex) => {
+        const imgId = `${shortBlockName}_${index}_image_${imgIndex}`;
+        img.id = imgId;
+        
+        // If image is inside a picture element, also add a data attribute to the picture
+        const picture = img.closest('picture');
+        if (picture) {
+          picture.setAttribute('data-img-id', imgId);
+        }
+      });
+
       // Add indexed IDs to divs that directly contain text content (not wrapper divs)
       const childDivs = block.querySelectorAll(':scope > div');
       childDivs.forEach((div, divIndex) => {
@@ -749,22 +748,22 @@ export function decorateDefaultBlock() {
     block.id = `${shortBlockName}-${index}`;
     block.setAttribute('data-block-name', shortBlockName);
     
-    // Add indexed IDs to images within the block
-    const images = block.querySelectorAll('img');
-    images.forEach((img, imgIndex) => {
-      const imgId = `section_${index}_image_${imgIndex}`;
-      img.id = imgId;
-      
-      // If image is inside a picture element, also add a data attribute to the picture
-      const picture = img.closest('picture');
-      if (picture) {
-        picture.setAttribute('data-img-id', imgId);
-      }
-    });
+      // Skip content ID generation for blocks that handle it themselves (columns, cards, carousel)
+      const blocksWithCustomIDs = ['columns', 'cards', 'carousel'];
+      if (!blocksWithCustomIDs.includes(shortBlockName)) {
 
-    // Skip content ID generation for blocks that handle it themselves (columns, cards, carousel)
-    const blocksWithCustomIDs = ['columns', 'cards', 'carousel'];
-    if (!blocksWithCustomIDs.includes(shortBlockName)) {
+      // Add indexed IDs to images within the block
+      const images = block.querySelectorAll('img');
+      images.forEach((img, imgIndex) => {
+        const imgId = `section_${index}_image_${imgIndex}`;
+        img.id = imgId;
+        
+        // If image is inside a picture element, also add a data attribute to the picture
+        const picture = img.closest('picture');
+        if (picture) {
+          picture.setAttribute('data-img-id', imgId);
+        }
+      });
       // Add indexed IDs to divs that directly contain text content (not wrapper divs)
       const childDivs = block.querySelectorAll(':scope > div, :scope > p, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6');
       childDivs.forEach((element, elemIndex) => {

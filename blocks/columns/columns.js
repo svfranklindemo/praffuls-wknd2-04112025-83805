@@ -171,6 +171,26 @@ export default function decorate(block) {
     });
   });
 
+  // Add indexed IDs to images within the block with container context
+  const images = block.querySelectorAll('img');
+  images.forEach((img) => {
+    const container = img.closest('[data-container-index]');
+    const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
+    
+    // Count images within its container
+    const containerImages = container ? container.querySelectorAll('img') : [img];
+    const imgIndex = Array.from(containerImages).indexOf(img);
+    
+    const imgId = `columns_${blockIndex}_container_${containerIndex}_image_${imgIndex}`;
+    img.id = imgId;
+    
+    // If image is inside a picture element, also add a data attribute to the picture
+    const picture = img.closest('picture');
+    if (picture) {
+      picture.setAttribute('data-img-id', imgId);
+    }
+  });
+
   // Add IDs to headings and paragraphs with container context
   ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
     const headings = block.querySelectorAll(tag);

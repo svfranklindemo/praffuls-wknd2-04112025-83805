@@ -41,10 +41,24 @@ export default function decorate(block) {
   blocks.forEach((block, index) => {
     block.id = `cards-${index}`;
     
-    // Add indexed IDs to images within the block
+    // Add indexed IDs to card body divs (which contain text content from AEM nodes)
+    const cardBodies = block.querySelectorAll('.cards-card-body');
+    cardBodies.forEach((cardBody, bodyIndex) => {
+      cardBody.id = `cards_${index}_container_${bodyIndex}`;
+      cardBody.setAttribute('data-container-index', bodyIndex);
+    });
+
+    // Add indexed IDs to images within the block with container context
     const images = block.querySelectorAll('img');
-    images.forEach((img, imgIndex) => {
-      const imgId = `cards_${index}_image_${imgIndex}`;
+    images.forEach((img) => {
+      const container = img.closest('[data-container-index]');
+      const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
+      
+      // Count images within its container
+      const containerImages = container ? container.querySelectorAll('img') : [img];
+      const imgIndex = Array.from(containerImages).indexOf(img);
+      
+      const imgId = `cards_${index}_container_${containerIndex}_image_${imgIndex}`;
       img.id = imgId;
       
       // If image is inside a picture element, also add a data attribute to the picture
@@ -52,13 +66,6 @@ export default function decorate(block) {
       if (picture) {
         picture.setAttribute('data-img-id', imgId);
       }
-    });
-
-    // Add indexed IDs to card body divs (which contain text content from AEM nodes)
-    const cardBodies = block.querySelectorAll('.cards-card-body');
-    cardBodies.forEach((cardBody, bodyIndex) => {
-      cardBody.id = `cards_${index}_container_${bodyIndex}`;
-      cardBody.setAttribute('data-container-index', bodyIndex);
     });
 
     // Add indexed IDs to heading elements with container context

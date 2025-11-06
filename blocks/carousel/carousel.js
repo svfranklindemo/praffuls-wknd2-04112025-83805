@@ -55,10 +55,24 @@ export default function decorate(block) {
   blocks.forEach((block, index) => {
     block.id = `carousel-${index}`;
     
-    // Add indexed IDs to images within the block
+    // Add indexed IDs to card body divs (which contain text content from AEM nodes)
+    const cardBodies = block.querySelectorAll('.cards-card-body');
+    cardBodies.forEach((cardBody, bodyIndex) => {
+      cardBody.id = `carousel_${index}_container_${bodyIndex}`;
+      cardBody.setAttribute('data-container-index', bodyIndex);
+    });
+
+    // Add indexed IDs to images within the block with container context
     const images = block.querySelectorAll('img');
-    images.forEach((img, imgIndex) => {
-      const imgId = `carousel_${index}_image_${imgIndex}`;
+    images.forEach((img) => {
+      const container = img.closest('[data-container-index]');
+      const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
+      
+      // Count images within its container
+      const containerImages = container ? container.querySelectorAll('img') : [img];
+      const imgIndex = Array.from(containerImages).indexOf(img);
+      
+      const imgId = `carousel_${index}_container_${containerIndex}_image_${imgIndex}`;
       img.id = imgId;
       
       // If image is inside a picture element, also add a data attribute to the picture
@@ -68,24 +82,32 @@ export default function decorate(block) {
       }
     });
 
-    // Add indexed IDs to card body divs (which contain text content from AEM nodes)
-    const cardBodies = block.querySelectorAll('.cards-card-body');
-    cardBodies.forEach((cardBody, bodyIndex) => {
-      cardBody.id = `carousel_${index}_content_${bodyIndex}`;
-    });
-
-    // Add indexed IDs to heading elements (h1-h6) within the block with separate counters
+    // Add indexed IDs to heading elements with container context
     ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
       const headings = block.querySelectorAll(tag);
-      headings.forEach((heading, headingIndex) => {
-        heading.id = `carousel_${index}_${tag}_${headingIndex}`;
+      headings.forEach((heading) => {
+        const container = heading.closest('[data-container-index]');
+        const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
+        
+        // Count this tag within its container
+        const containerHeadings = container ? container.querySelectorAll(tag) : [heading];
+        const tagIndex = Array.from(containerHeadings).indexOf(heading);
+        
+        heading.id = `carousel_${index}_container_${containerIndex}_${tag}_${tagIndex}`;
       });
     });
 
-    // Add indexed IDs to paragraph elements within the block
+    // Add indexed IDs to paragraph elements with container context
     const paragraphs = block.querySelectorAll('p');
-    paragraphs.forEach((p, pIndex) => {
-      p.id = `carousel_${index}_p_${pIndex}`;
+    paragraphs.forEach((p) => {
+      const container = p.closest('[data-container-index]');
+      const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
+      
+      // Count paragraphs within its container
+      const containerParagraphs = container ? container.querySelectorAll('p') : [p];
+      const pIndex = Array.from(containerParagraphs).indexOf(p);
+      
+      p.id = `carousel_${index}_container_${containerIndex}_p_${pIndex}`;
     });
   });
 }
