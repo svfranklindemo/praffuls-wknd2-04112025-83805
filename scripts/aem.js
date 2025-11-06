@@ -695,21 +695,6 @@ function decorateBlock(block) {
         img.id = imgId;
         img.setAttribute('data-img-id', imgId);
       });
-
-      // Add indexed IDs to divs that directly contain text content (not wrapper divs)
-      const childDivs = block.querySelectorAll(':scope > div');
-      childDivs.forEach((div, divIndex) => {
-        // Check if this div has a single child div (wrapper pattern)
-        const singleChildDiv = div.children.length === 1 && div.children[0].tagName === 'DIV';
-        
-        if (singleChildDiv && div.children[0].textContent.trim()) {
-          // Add ID to the inner div that contains the actual content
-          div.children[0].id = `${shortBlockName}_${index}_content_${divIndex}`;
-        } else if (div.textContent.trim() && !singleChildDiv) {
-          // Add ID to this div if it directly contains content
-          div.id = `${shortBlockName}_${index}_content_${divIndex}`;
-        }
-      });
     }
 
     // Merge headings (h1-h6) and paragraphs into a single loop for efficiency
@@ -738,9 +723,9 @@ export function decorateDefaultBlock() {
     block.id = `${shortBlockName}-${index}`;
     block.setAttribute('data-block-name', shortBlockName);
     
-      // Skip content ID generation for blocks that handle it themselves (columns, cards, carousel)
-      const blocksWithCustomIDs = ['columns', 'cards', 'carousel'];
-      if (!blocksWithCustomIDs.includes(shortBlockName)) {
+    // Skip content ID generation for blocks that handle it themselves (columns, cards, carousel)
+    const blocksWithCustomIDs = ['columns', 'cards', 'carousel'];
+    if (!blocksWithCustomIDs.includes(shortBlockName)) {
 
       // Add indexed IDs to images within the block
       const images = block.querySelectorAll('img');
@@ -748,25 +733,6 @@ export function decorateDefaultBlock() {
         const imgId = `section_${index}_image_${imgIndex}`;
         img.id = imgId;
         img.setAttribute('data-img-id', imgId);
-      });
-      // Add indexed IDs to divs that directly contain text content (not wrapper divs)
-      const childDivs = block.querySelectorAll(':scope > div, :scope > p, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6');
-      childDivs.forEach((element, elemIndex) => {
-        // For div elements, check if it's a wrapper
-        if (element.tagName === 'DIV') {
-          const singleChildDiv = element.children.length === 1 && element.children[0].tagName === 'DIV';
-          
-          if (singleChildDiv && element.children[0].textContent.trim()) {
-            // Add ID to the inner div that contains the actual content
-            element.children[0].id = `${shortBlockName}_${index}_content_${elemIndex}`;
-          } else if (element.textContent.trim() && !singleChildDiv) {
-            // Add ID to this div if it directly contains content
-            element.id = `${shortBlockName}_${index}_content_${elemIndex}`;
-          }
-        } else if (element.textContent.trim()) {
-          // For non-div elements (p, h1-h6), always add ID
-          element.id = `${shortBlockName}_${index}_content_${elemIndex}`;
-        }
       });
     }
 

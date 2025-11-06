@@ -62,9 +62,6 @@ export default function decorate(block) {
       const cardDivs = li.querySelectorAll(':scope > div');
       cardDivs.forEach((div) => {
         div.setAttribute('data-container-index', liIndex);
-        if (div.classList.contains('cards-card-body')) {
-          div.id = `carousel_${index}_container_${liIndex}`;
-        }
       });
     });
 

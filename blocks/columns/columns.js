@@ -131,7 +131,6 @@ export default function decorate(block) {
       if (textContent && !pic) {  // Only add if no picture (avoid double counting)
         const contentWrapper = textContent.closest('div');
         if (contentWrapper) {
-          contentWrapper.id = `columns_${blockIndex}_container_${contentCounter}`;
           contentWrapper.setAttribute('data-container-index', contentCounter);
           contentCounter++;
         }
