@@ -70,31 +70,19 @@ export default function decorate(block) {
     });
 
     // Add indexed IDs to heading elements with container context
-    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
-      const headings = block.querySelectorAll(tag);
-      headings.forEach((heading) => {
-        const container = heading.closest('[data-container-index]');
+    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6','p'].forEach((tag) => {
+      const elements = block.querySelectorAll(tag);
+      elements.forEach((el) => {
+        const container = el.closest('[data-container-index]');
         const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
         
         // Count this tag within its container
-        const containerHeadings = container ? container.querySelectorAll(tag) : [heading];
-        const tagIndex = Array.from(containerHeadings).indexOf(heading);
+        const containerElements = container ? container.querySelectorAll(tag) : [el];
+        const tagIndex = Array.from(containerElements).indexOf(el);
         
-        heading.id = `cards_${index}_container_${containerIndex}_${tag}_${tagIndex}`;
+        el.id = `cards_${index}_container_${containerIndex}_${tag}_${tagIndex}`;
+        el.setAttribute(`data-${tag}-id`, el.id);
       });
-    });
-
-    // Add indexed IDs to paragraph elements with container context
-    const paragraphs = block.querySelectorAll('p');
-    paragraphs.forEach((p) => {
-      const container = p.closest('[data-container-index]');
-      const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
-      
-      // Count paragraphs within its container
-      const containerParagraphs = container ? container.querySelectorAll('p') : [p];
-      const pIndex = Array.from(containerParagraphs).indexOf(p);
-      
-      p.id = `cards_${index}_container_${containerIndex}_p_${pIndex}`;
     });
   });
 }

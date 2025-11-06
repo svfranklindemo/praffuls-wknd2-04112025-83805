@@ -712,18 +712,13 @@ function decorateBlock(block) {
       });
     }
 
-    // Add indexed IDs to heading elements (h1-h6) within the block with separate counters
-    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
-      const headings = block.querySelectorAll(tag);
-      headings.forEach((heading, headingIndex) => {
-        heading.id = `${shortBlockName}_${index}_${tag}_${headingIndex}`;
+    // Merge headings (h1-h6) and paragraphs into a single loop for efficiency
+    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].forEach((tag) => {
+      const elements = block.querySelectorAll(tag);
+      elements.forEach((el, elIndex) => {
+        el.id = `${shortBlockName}_${index}_${tag}_${elIndex}`;
+        el.setAttribute(`data-${tag}-id`, el.id);
       });
-    });
-
-    // Add indexed IDs to paragraph elements within the block
-    const paragraphs = block.querySelectorAll('p');
-    paragraphs.forEach((p, pIndex) => {
-      p.id = `${shortBlockName}_${index}_p_${pIndex}`;
     });
   });
   }
@@ -775,18 +770,13 @@ export function decorateDefaultBlock() {
       });
     }
 
-    // Add indexed IDs to heading elements (h1-h6) within the block with separate counters
-    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
-      const headings = block.querySelectorAll(tag);
-      headings.forEach((heading, headingIndex) => {
-        heading.id = `${shortBlockName}_${index}_${tag}_${headingIndex}`;
+    // Add indexed IDs to elements (h1-h6, p) within the block
+    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].forEach((tag) => {
+      const elements = block.querySelectorAll(tag);
+      elements.forEach((el, elIndex) => {
+        el.id = `${shortBlockName}_${index}_${tag}_${elIndex}`;
+        el.setAttribute(`data-${tag}-id`, el.id);
       });
-    });
-
-    // Add indexed IDs to paragraph elements within the block
-    const paragraphs = block.querySelectorAll('p');
-    paragraphs.forEach((p, pIndex) => {
-      p.id = `${shortBlockName}_${index}_p_${pIndex}`;
     });
     
   });
