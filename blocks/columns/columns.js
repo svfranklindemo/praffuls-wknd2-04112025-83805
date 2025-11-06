@@ -186,12 +186,7 @@ export default function decorate(block) {
     
     const imgId = `columns_${blockIndex}_container_${containerIndex}_image_${imgIndex}`;
     img.id = imgId;
-    
-    // If image is inside a picture element, also add a data attribute to the picture
-    const picture = img.closest('picture');
-    if (picture) {
-      picture.setAttribute('data-img-id', imgId);
-    }
+    img.setAttribute('data-img-id', imgId);
   });
 
   // Add IDs to headings and paragraphs with container context

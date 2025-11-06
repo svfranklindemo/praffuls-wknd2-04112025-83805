@@ -41,11 +41,17 @@ export default function decorate(block) {
   blocks.forEach((block, index) => {
     block.id = `cards-${index}`;
     
-    // Add indexed IDs to card body divs (which contain text content from AEM nodes)
-    const cardBodies = block.querySelectorAll('.cards-card-body');
-    cardBodies.forEach((cardBody, bodyIndex) => {
-      cardBody.id = `cards_${index}_container_${bodyIndex}`;
-      cardBody.setAttribute('data-container-index', bodyIndex);
+    // Add indexed IDs to all card divs (both image and body) with container context
+    const listItems = block.querySelectorAll('li');
+    listItems.forEach((li, liIndex) => {
+      // Add container index to all child divs in this card
+      const cardDivs = li.querySelectorAll(':scope > div');
+      cardDivs.forEach((div) => {
+        div.setAttribute('data-container-index', liIndex);
+        if (div.classList.contains('cards-card-body')) {
+          div.id = `cards_${index}_container_${liIndex}`;
+        }
+      });
     });
 
     // Add indexed IDs to images within the block with container context
@@ -60,12 +66,7 @@ export default function decorate(block) {
       
       const imgId = `cards_${index}_container_${containerIndex}_image_${imgIndex}`;
       img.id = imgId;
-      
-      // If image is inside a picture element, also add a data attribute to the picture
-      const picture = img.closest('picture');
-      if (picture) {
-        picture.setAttribute('data-img-id', imgId);
-      }
+      img.setAttribute('data-img-id', imgId);
     });
 
     // Add indexed IDs to heading elements with container context

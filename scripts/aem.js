@@ -693,12 +693,7 @@ function decorateBlock(block) {
       images.forEach((img, imgIndex) => {
         const imgId = `${shortBlockName}_${index}_image_${imgIndex}`;
         img.id = imgId;
-        
-        // If image is inside a picture element, also add a data attribute to the picture
-        const picture = img.closest('picture');
-        if (picture) {
-          picture.setAttribute('data-img-id', imgId);
-        }
+        img.setAttribute('data-img-id', imgId);
       });
 
       // Add indexed IDs to divs that directly contain text content (not wrapper divs)
@@ -757,12 +752,7 @@ export function decorateDefaultBlock() {
       images.forEach((img, imgIndex) => {
         const imgId = `section_${index}_image_${imgIndex}`;
         img.id = imgId;
-        
-        // If image is inside a picture element, also add a data attribute to the picture
-        const picture = img.closest('picture');
-        if (picture) {
-          picture.setAttribute('data-img-id', imgId);
-        }
+        img.setAttribute('data-img-id', imgId);
       });
       // Add indexed IDs to divs that directly contain text content (not wrapper divs)
       const childDivs = block.querySelectorAll(':scope > div, :scope > p, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6');
