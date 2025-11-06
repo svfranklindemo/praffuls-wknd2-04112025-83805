@@ -699,11 +699,17 @@ function decorateBlock(block) {
       }
     });
 
-    // Add indexed IDs to direct child divs (which contain text content from AEM nodes)
+    // Add indexed IDs to divs that directly contain text content (not wrapper divs)
     const childDivs = block.querySelectorAll(':scope > div');
     childDivs.forEach((div, divIndex) => {
-      // Only add ID if the div contains text content (not just images)
-      if (div.textContent.trim()) {
+      // Check if this div has a single child div (wrapper pattern)
+      const singleChildDiv = div.children.length === 1 && div.children[0].tagName === 'DIV';
+      
+      if (singleChildDiv && div.children[0].textContent.trim()) {
+        // Add ID to the inner div that contains the actual content
+        div.children[0].id = `${shortBlockName}_${index}_content_${divIndex}`;
+      } else if (div.textContent.trim() && !singleChildDiv) {
+        // Add ID to this div if it directly contains content
         div.id = `${shortBlockName}_${index}_content_${divIndex}`;
       }
     });
@@ -752,11 +758,22 @@ export function decorateDefaultBlock() {
       }
     });
 
-    // Add indexed IDs to direct child divs (which contain text content from AEM nodes)
+    // Add indexed IDs to divs that directly contain text content (not wrapper divs)
     const childDivs = block.querySelectorAll(':scope > div, :scope > p, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6');
     childDivs.forEach((element, elemIndex) => {
-      // Only add ID if the element contains text content
-      if (element.textContent.trim()) {
+      // For div elements, check if it's a wrapper
+      if (element.tagName === 'DIV') {
+        const singleChildDiv = element.children.length === 1 && element.children[0].tagName === 'DIV';
+        
+        if (singleChildDiv && element.children[0].textContent.trim()) {
+          // Add ID to the inner div that contains the actual content
+          element.children[0].id = `${shortBlockName}_${index}_content_${elemIndex}`;
+        } else if (element.textContent.trim() && !singleChildDiv) {
+          // Add ID to this div if it directly contains content
+          element.id = `${shortBlockName}_${index}_content_${elemIndex}`;
+        }
+      } else if (element.textContent.trim()) {
+        // For non-div elements (p, h1-h6), always add ID
         element.id = `${shortBlockName}_${index}_content_${elemIndex}`;
       }
     });
