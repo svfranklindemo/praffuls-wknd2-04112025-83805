@@ -699,6 +699,15 @@ function decorateBlock(block) {
       }
     });
 
+    // Add indexed IDs to direct child divs (which contain text content from AEM nodes)
+    const childDivs = block.querySelectorAll(':scope > div');
+    childDivs.forEach((div, divIndex) => {
+      // Only add ID if the div contains text content (not just images)
+      if (div.textContent.trim()) {
+        div.id = `${shortBlockName}_${index}_content_${divIndex}`;
+      }
+    });
+
     // Add indexed IDs to heading elements (h1-h6) within the block with separate counters
     ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
       const headings = block.querySelectorAll(tag);
@@ -740,6 +749,15 @@ export function decorateDefaultBlock() {
       const picture = img.closest('picture');
       if (picture) {
         picture.setAttribute('data-img-id', imgId);
+      }
+    });
+
+    // Add indexed IDs to direct child divs (which contain text content from AEM nodes)
+    const childDivs = block.querySelectorAll(':scope > div, :scope > p, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6');
+    childDivs.forEach((element, elemIndex) => {
+      // Only add ID if the element contains text content
+      if (element.textContent.trim()) {
+        element.id = `${shortBlockName}_${index}_content_${elemIndex}`;
       }
     });
 

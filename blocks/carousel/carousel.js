@@ -68,6 +68,12 @@ export default function decorate(block) {
       }
     });
 
+    // Add indexed IDs to card body divs (which contain text content from AEM nodes)
+    const cardBodies = block.querySelectorAll('.cards-card-body');
+    cardBodies.forEach((cardBody, bodyIndex) => {
+      cardBody.id = `carousel_${index}_content_${bodyIndex}`;
+    });
+
     // Add indexed IDs to heading elements (h1-h6) within the block with separate counters
     ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
       const headings = block.querySelectorAll(tag);
