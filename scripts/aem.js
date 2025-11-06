@@ -717,7 +717,7 @@ function decorateBlock(block) {
       const elements = block.querySelectorAll(tag);
       elements.forEach((el, elIndex) => {
         el.id = `${shortBlockName}_${index}_${tag}_${elIndex}`;
-        el.setAttribute(`data-${tag}-id`, el.id);
+        el.setAttribute(`data-text-content-id`, el.id);
       });
     });
   });
@@ -775,7 +775,7 @@ export function decorateDefaultBlock() {
       const elements = block.querySelectorAll(tag);
       elements.forEach((el, elIndex) => {
         el.id = `${shortBlockName}_${index}_${tag}_${elIndex}`;
-        el.setAttribute(`data-${tag}-id`, el.id);
+        el.setAttribute(`data-text-content-id`, el.id);
       });
     });
     

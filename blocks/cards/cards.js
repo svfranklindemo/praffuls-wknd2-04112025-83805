@@ -81,7 +81,7 @@ export default function decorate(block) {
         const tagIndex = Array.from(containerElements).indexOf(el);
         
         el.id = `cards_${index}_container_${containerIndex}_${tag}_${tagIndex}`;
-        el.setAttribute(`data-${tag}-id`, el.id);
+        el.setAttribute(`data-text-content-id`, el.id);
       });
     });
   });
