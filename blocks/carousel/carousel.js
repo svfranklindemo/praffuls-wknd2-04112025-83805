@@ -55,6 +55,13 @@ export default function decorate(block) {
   blocks.forEach((block, index) => {
     block.id = `carousel-${index}`;
     
+    // Add indexed IDs to images within the block (simple format)
+    const images = block.querySelectorAll('img');
+    images.forEach((img, imgIndex) => {
+      const imgId = `carousel_${index}_image_${imgIndex}`;
+      img.id = imgId;
+    });
+
     // Add indexed IDs to all card divs (both image and body) with container context
     const listItems = block.querySelectorAll('li');
     listItems.forEach((li, liIndex) => {
@@ -63,21 +70,6 @@ export default function decorate(block) {
       cardDivs.forEach((div) => {
         div.setAttribute('data-container-index', liIndex);
       });
-    });
-
-    // Add indexed IDs to images within the block with container context
-    const images = block.querySelectorAll('img');
-    images.forEach((img) => {
-      const container = img.closest('[data-container-index]');
-      const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
-      
-      // Count images within its container
-      const containerImages = container ? container.querySelectorAll('img') : [img];
-      const imgIndex = Array.from(containerImages).indexOf(img);
-      
-      const imgId = `carousel_${index}_container_${containerIndex}_image_${imgIndex}`;
-      img.id = imgId;
-      img.setAttribute('data-img-id', imgId);
     });
 
     // Add indexed IDs to heading elements with container context

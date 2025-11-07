@@ -684,27 +684,24 @@ function decorateBlock(block) {
     blocks.forEach((block, index) => {
     block.id = `${shortBlockName}-${index}`;
 
+    // Add indexed IDs to images within the block
+    const images = block.querySelectorAll('img');
+    images.forEach((img, imgIndex) => {
+      const imgId = `${shortBlockName}_${index}_image_${imgIndex}`;
+      img.id = imgId;
+    });
+
     // Skip content ID generation for blocks that handle it themselves (columns, cards, carousel)
     const blocksWithCustomIDs = ['columns', 'cards', 'carousel'];
     if (!blocksWithCustomIDs.includes(shortBlockName)) {
-
-      // Add indexed IDs to images within the block
-      const images = block.querySelectorAll('img');
-      images.forEach((img, imgIndex) => {
-        const imgId = `${shortBlockName}_${index}_image_${imgIndex}`;
-        img.id = imgId;
-        img.setAttribute('data-img-id', imgId);
+      // Merge headings (h1-h6) and paragraphs into a single loop for efficiency
+      ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].forEach((tag) => {
+        const elements = block.querySelectorAll(tag);
+        elements.forEach((el, elIndex) => {
+          el.id = `${shortBlockName}_${index}_${tag}_${elIndex}`;
+        });
       });
     }
-
-    // Merge headings (h1-h6) and paragraphs into a single loop for efficiency
-    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].forEach((tag) => {
-      const elements = block.querySelectorAll(tag);
-      elements.forEach((el, elIndex) => {
-        el.id = `${shortBlockName}_${index}_${tag}_${elIndex}`;
-        el.setAttribute(`data-text-content-id`, el.id);
-      });
-    });
   });
   }
 }
@@ -723,28 +720,24 @@ export function decorateDefaultBlock() {
     block.id = `${shortBlockName}-${index}`;
     block.setAttribute('data-block-name', shortBlockName);
     
+    // Add indexed IDs to images within the block
+    const images = block.querySelectorAll('img');
+    images.forEach((img, imgIndex) => {
+      const imgId = `section_${index}_image_${imgIndex}`;
+      img.id = imgId;
+    });
+
     // Skip content ID generation for blocks that handle it themselves (columns, cards, carousel)
     const blocksWithCustomIDs = ['columns', 'cards', 'carousel'];
     if (!blocksWithCustomIDs.includes(shortBlockName)) {
-
-      // Add indexed IDs to images within the block
-      const images = block.querySelectorAll('img');
-      images.forEach((img, imgIndex) => {
-        const imgId = `section_${index}_image_${imgIndex}`;
-        img.id = imgId;
-        img.setAttribute('data-img-id', imgId);
+      // Add indexed IDs to elements (h1-h6, p) within the block
+      ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].forEach((tag) => {
+        const elements = block.querySelectorAll(tag);
+        elements.forEach((el, elIndex) => {
+          el.id = `${shortBlockName}_${index}_${tag}_${elIndex}`;
+        });
       });
     }
-
-    // Add indexed IDs to elements (h1-h6, p) within the block
-    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].forEach((tag) => {
-      const elements = block.querySelectorAll(tag);
-      elements.forEach((el, elIndex) => {
-        el.id = `${shortBlockName}_${index}_${tag}_${elIndex}`;
-        el.setAttribute(`data-text-content-id`, el.id);
-      });
-    });
-    
   });
 }
 

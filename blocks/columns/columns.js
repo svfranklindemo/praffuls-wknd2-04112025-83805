@@ -175,15 +175,8 @@ export default function decorate(block) {
 
   // Add indexed IDs to images within the block with container context
   const images = block.querySelectorAll('img');
-  images.forEach((img) => {
-    const container = img.closest('[data-container-index]');
-    const containerIndex = container ? container.getAttribute('data-container-index') : 'unknown';
-    
-    // Count images within its container
-    const containerImages = container ? container.querySelectorAll('img') : [img];
-    const imgIndex = Array.from(containerImages).indexOf(img);
-    
-    const imgId = `columns_${blockIndex}_container_${containerIndex}_image_${imgIndex}`;
+  images.forEach((img, imgIndex) => {
+    const imgId = `columns_${blockIndex}_image_${imgIndex}`;
     img.id = imgId;
     img.setAttribute('data-img-id', imgId);
   });
