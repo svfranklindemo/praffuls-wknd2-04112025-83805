@@ -48,14 +48,11 @@ export default function decorate(block) {
       img.id = imgId;
     });
 
-    // Add indexed IDs to all card divs (both image and body) with container context
-    const listItems = block.querySelectorAll('li');
-    listItems.forEach((li, liIndex) => {
-      // Add container index to all child divs in this card
-      const cardDivs = li.querySelectorAll(':scope > div');
-      cardDivs.forEach((div) => {
-        div.setAttribute('data-container-index', liIndex);
-      });
+    // Add indexed IDs to text content divs only
+    const cardBodies = block.querySelectorAll('.cards-card-body');
+    cardBodies.forEach((cardBody, bodyIndex) => {
+      cardBody.id = `cards_${index}_container_${bodyIndex}`;
+      cardBody.setAttribute('data-container-index', bodyIndex);
     });
 
     // Add indexed IDs to heading elements with container context
@@ -70,7 +67,6 @@ export default function decorate(block) {
         const tagIndex = Array.from(containerElements).indexOf(el);
         
         el.id = `cards_${index}_container_${containerIndex}_${tag}_${tagIndex}`;
-        el.setAttribute(`data-text-content-id`, el.id);
       });
     });
   });
